@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "diskio.h": "c",
+        "gd32vf103_timer.h": "c"
+    }
+}
