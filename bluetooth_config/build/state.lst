@@ -1,0 +1,243 @@
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s 			page 1
+
+
+   1              		.file	"state.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.get_state,"ax",@progbits
+  10              		.align	1
+  11              		.globl	get_state
+  13              	get_state:
+  14              	.LFB3:
+  15              		.file 1 "state.c"
+   1:state.c       **** #include <stdlib.h>
+   2:state.c       **** #include <stdio.h>
+   3:state.c       **** #include "state.h"
+   4:state.c       **** 
+   5:state.c       **** static int current_state = RUNNING;
+   6:state.c       **** 
+   7:state.c       **** int get_state(){
+  16              		.loc 1 7 16
+  17              		.cfi_startproc
+   8:state.c       ****     return current_state;
+  18              		.loc 1 8 5
+   9:state.c       **** };
+  19              		.loc 1 9 1 is_stmt 0
+  20 0000 B7070000 		lui	a5,%hi(.LANCHOR0)
+  21 0004 03A50700 		lw	a0,%lo(.LANCHOR0)(a5)
+  22 0008 8280     		ret
+  23              		.cfi_endproc
+  24              	.LFE3:
+  26              		.section	.text.set_state,"ax",@progbits
+  27              		.align	1
+  28              		.globl	set_state
+  30              	set_state:
+  31              	.LFB4:
+  10:state.c       **** 
+  11:state.c       **** void set_state(int state){
+  32              		.loc 1 11 26 is_stmt 1
+  33              		.cfi_startproc
+  34              	.LVL0:
+  12:state.c       ****     current_state = state;
+  35              		.loc 1 12 5
+  36              		.loc 1 12 19 is_stmt 0
+  37 0000 B7070000 		lui	a5,%hi(.LANCHOR0)
+  38 0004 23A0A700 		sw	a0,%lo(.LANCHOR0)(a5)
+  13:state.c       **** }
+  39              		.loc 1 13 1
+  40 0008 8280     		ret
+  41              		.cfi_endproc
+  42              	.LFE4:
+  44              		.section	.sbss.current_state,"aw",@nobits
+  45              		.align	2
+  46              		.set	.LANCHOR0,. + 0
+  49              	current_state:
+  50 0000 00000000 		.zero	4
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s 			page 2
+
+
+  51              		.text
+  52              	.Letext0:
+  53              		.file 2 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/lib/gcc/riscv64-unknown-e
+  54              		.file 3 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+  55              		.file 4 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+  56              		.file 5 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+  57              		.file 6 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+  58              		.file 7 "state.h"
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 state.c
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:13     .text.get_state:0000000000000000 get_state
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:17     .text.get_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:18     .text.get_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:19     .text.get_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:20     .text.get_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:23     .text.get_state:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:30     .text.set_state:0000000000000000 set_state
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:33     .text.set_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:35     .text.set_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:36     .text.set_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:37     .text.set_state:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:40     .text.set_state:0000000000000008 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:41     .text.set_state:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:46     .sbss.current_state:0000000000000000 .LANCHOR0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:49     .sbss.current_state:0000000000000000 current_state
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:26     .text.get_state:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:44     .text.set_state:000000000000000a .L0 
+                     .debug_frame:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:1520   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2289   .debug_str:000000000000045e .LASF124
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2157   .debug_str:0000000000000202 .LASF125
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2087   .debug_str:0000000000000076 .LASF126
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2057   .debug_ranges:0000000000000000 .Ldebug_ranges0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2065   .debug_line:0000000000000000 .Ldebug_line0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2155   .debug_str:00000000000001f5 .LASF0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2173   .debug_str:000000000000024a .LASF1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2097   .debug_str:00000000000000f5 .LASF2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2197   .debug_str:00000000000002bc .LASF3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2185   .debug_str:000000000000028d .LASF10
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2099   .debug_str:0000000000000103 .LASF4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2223   .debug_str:000000000000033c .LASF5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2229   .debug_str:0000000000000358 .LASF6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2117   .debug_str:000000000000014e .LASF7
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2165   .debug_str:0000000000000221 .LASF8
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2081   .debug_str:000000000000004b .LASF9
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2211   .debug_str:00000000000002fb .LASF11
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2275   .debug_str:0000000000000428 .LASF12
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2309   .debug_str:000000000000053e .LASF13
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2183   .debug_str:0000000000000287 .LASF14
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2159   .debug_str:000000000000020a .LASF15
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2267   .debug_str:0000000000000406 .LASF16
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2269   .debug_str:000000000000040e .LASF17
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2241   .debug_str:0000000000000388 .LASF18
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2295   .debug_str:00000000000004f4 .LASF19
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2217   .debug_str:000000000000031a .LASF20
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2141   .debug_str:00000000000001b8 .LASF21
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2145   .debug_str:00000000000001c9 .LASF26
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2285   .debug_str:000000000000044b .LASF22
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2261   .debug_str:00000000000003f1 .LASF23
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2139   .debug_str:00000000000001b2 .LASF24
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2303   .debug_str:0000000000000529 .LASF25
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2153   .debug_str:00000000000001f0 .LASF27
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2095   .debug_str:00000000000000ec .LASF28
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2281   .debug_str:000000000000043c .LASF29
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2105   .debug_str:000000000000011b .LASF30
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s 			page 4
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2331   .debug_str:00000000000005a2 .LASF31
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2201   .debug_str:00000000000002cf .LASF32
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2193   .debug_str:00000000000002a9 .LASF33
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2305   .debug_str:000000000000052e .LASF34
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2231   .debug_str:0000000000000362 .LASF35
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2319   .debug_str:0000000000000569 .LASF36
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2109   .debug_str:000000000000012a .LASF37
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2135   .debug_str:00000000000001a5 .LASF38
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2067   .debug_str:0000000000000000 .LASF39
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2291   .debug_str:00000000000004e6 .LASF40
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2121   .debug_str:000000000000015e .LASF41
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2203   .debug_str:00000000000002d8 .LASF42
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2253   .debug_str:00000000000003c1 .LASF43
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2137   .debug_str:00000000000001ad .LASF44
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2235   .debug_str:0000000000000374 .LASF45
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2103   .debug_str:0000000000000115 .LASF46
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2069   .debug_str:000000000000000c .LASF47
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2243   .debug_str:0000000000000393 .LASF48
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2119   .debug_str:0000000000000157 .LASF49
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2169   .debug_str:000000000000023d .LASF50
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2083   .debug_str:0000000000000062 .LASF51
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2111   .debug_str:0000000000000138 .LASF52
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2149   .debug_str:00000000000001e0 .LASF53
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2191   .debug_str:00000000000002a2 .LASF54
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2271   .debug_str:0000000000000416 .LASF55
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2323   .debug_str:0000000000000583 .LASF56
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2101   .debug_str:000000000000010f .LASF57
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2315   .debug_str:000000000000055b .LASF58
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2125   .debug_str:000000000000016d .LASF59
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2129   .debug_str:000000000000017e .LASF60
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2075   .debug_str:0000000000000025 .LASF61
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2187   .debug_str:0000000000000294 .LASF62
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2245   .debug_str:000000000000039b .LASF63
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2189   .debug_str:000000000000029a .LASF64
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2263   .debug_str:00000000000003f9 .LASF65
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2277   .debug_str:0000000000000430 .LASF66
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2123   .debug_str:0000000000000166 .LASF67
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2161   .debug_str:0000000000000211 .LASF68
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2143   .debug_str:00000000000001c1 .LASF69
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2251   .debug_str:00000000000003bc .LASF70
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2073   .debug_str:000000000000001a .LASF71
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2259   .debug_str:00000000000003d8 .LASF72
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2255   .debug_str:00000000000003c6 .LASF73
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2209   .debug_str:00000000000002f0 .LASF74
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2257   .debug_str:00000000000003ce .LASF75
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2181   .debug_str:000000000000027f .LASF76
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2151   .debug_str:00000000000001e6 .LASF77
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2329   .debug_str:000000000000059d .LASF78
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2215   .debug_str:0000000000000310 .LASF79
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2163   .debug_str:0000000000000219 .LASF80
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2127   .debug_str:0000000000000176 .LASF81
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2225   .debug_str:000000000000034a .LASF82
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2175   .debug_str:000000000000025d .LASF83
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2313   .debug_str:0000000000000551 .LASF84
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2113   .debug_str:0000000000000140 .LASF85
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2107   .debug_str:0000000000000125 .LASF86
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2279   .debug_str:0000000000000437 .LASF87
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s 			page 5
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2239   .debug_str:0000000000000381 .LASF88
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2307   .debug_str:0000000000000538 .LASF89
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2171   .debug_str:0000000000000243 .LASF90
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2237   .debug_str:000000000000037b .LASF91
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2071   .debug_str:0000000000000012 .LASF92
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2265   .debug_str:0000000000000400 .LASF93
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2283   .debug_str:0000000000000445 .LASF94
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2293   .debug_str:00000000000004ef .LASF95
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2301   .debug_str:000000000000051c .LASF96
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2287   .debug_str:0000000000000451 .LASF97
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2179   .debug_str:0000000000000272 .LASF98
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2321   .debug_str:0000000000000574 .LASF99
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2147   .debug_str:00000000000001d1 .LASF100
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2247   .debug_str:00000000000003a4 .LASF101
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2325   .debug_str:000000000000058a .LASF102
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2249   .debug_str:00000000000003af .LASF103
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2327   .debug_str:000000000000058f .LASF104
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2093   .debug_str:00000000000000de .LASF105
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2311   .debug_str:0000000000000547 .LASF106
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2177   .debug_str:0000000000000266 .LASF107
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2297   .debug_str:00000000000004fc .LASF108
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2133   .debug_str:0000000000000197 .LASF109
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2089   .debug_str:00000000000000c5 .LASF110
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2131   .debug_str:0000000000000186 .LASF111
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2077   .debug_str:000000000000002b .LASF112
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2079   .debug_str:000000000000003a .LASF113
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2227   .debug_str:000000000000034f .LASF114
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2199   .debug_str:00000000000002c8 .LASF115
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2195   .debug_str:00000000000002b3 .LASF116
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2317   .debug_str:0000000000000561 .LASF117
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2085   .debug_str:000000000000006b .LASF127
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2273   .debug_str:000000000000041c .LASF118
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2299   .debug_str:0000000000000509 .LASF119
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2205   .debug_str:00000000000002e0 .LASF120
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2219   .debug_str:000000000000032c .LASF128
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2233   .debug_str:000000000000036c .LASF121
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2207   .debug_str:00000000000002ea .LASF122
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2221   .debug_str:0000000000000337 .LASF123
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2213   .debug_str:0000000000000302 .LASF129
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2167   .debug_str:0000000000000233 .LASF130
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:31     .text.set_state:0000000000000000 .LFB4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:42     .text.set_state:000000000000000a .LFE4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2115   .debug_str:0000000000000148 .LASF131
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:2091   .debug_str:00000000000000d4 .LASF132
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:14     .text.get_state:0000000000000000 .LFB3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:24     .text.get_state:000000000000000a .LFE3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccwyxNqg.s:60     .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS

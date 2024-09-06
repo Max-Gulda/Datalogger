@@ -3,7 +3,7 @@
 //#define MPU6500_ADDR_W				(MPU6500_ADDR << 1U)
 //#define MPU6500_WHO_AM_I_ID			0x70
 
-#define MPU6500_ADDR 				0x69
+#define MPU6500_ADDR 				0x68
 #define MPU6500_ADDR_R				((MPU6500_ADDR << 1U) | 1U)
 #define MPU6500_ADDR_W				(MPU6500_ADDR << 1U)
 #define MPU6500_WHO_AM_I_ID			0x11

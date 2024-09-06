@@ -1,0 +1,1222 @@
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 1
+
+
+   1              		.file	"radioHead.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.init_radio,"ax",@progbits
+  10              		.align	1
+  11              		.globl	init_radio
+  13              	init_radio:
+  14              	.LFB2:
+  15              		.file 1 "radioHead.c"
+   1:radioHead.c   **** #include "gd32vf103.h"
+   2:radioHead.c   **** #include "radioHead.h"
+   3:radioHead.c   **** #include "systick.h"
+   4:radioHead.c   **** 
+   5:radioHead.c   **** 
+   6:radioHead.c   **** char rx_radio_buffer[1024] = {'\0'};
+   7:radioHead.c   **** char tx_radio_buffer[1024] = {'\0'};
+   8:radioHead.c   **** 
+   9:radioHead.c   **** void init_radio(){
+  16              		.loc 1 9 18
+  17              		.cfi_startproc
+  10:radioHead.c   ****     dma_parameter_struct dma_init_struct;
+  18              		.loc 1 10 5
+  11:radioHead.c   ****     /* enable DMA0 */
+  12:radioHead.c   ****     rcu_periph_clock_enable(RCU_DMA0);
+  19              		.loc 1 12 5
+   9:radioHead.c   ****     dma_parameter_struct dma_init_struct;
+  20              		.loc 1 9 18 is_stmt 0
+  21 0000 4111     		addi	sp,sp,-16
+  22              	.LCFI0:
+  23              		.cfi_def_cfa_offset 16
+  24              		.loc 1 12 5
+  25 0002 13050050 		li	a0,1280
+   9:radioHead.c   ****     dma_parameter_struct dma_init_struct;
+  26              		.loc 1 9 18
+  27 0006 06C6     		sw	ra,12(sp)
+  28 0008 22C4     		sw	s0,8(sp)
+  29              		.cfi_offset 1, -4
+  30              		.cfi_offset 8, -8
+  31              		.loc 1 12 5
+  32 000a 97000000 		call	rcu_periph_clock_enable
+  32      E7800000 
+  33              	.LVL0:
+  13:radioHead.c   ****     /* initialize USART */
+  14:radioHead.c   ****     rcu_periph_clock_enable(RCU_GPIOB);
+  34              		.loc 1 14 5 is_stmt 1
+  35 0012 13053060 		li	a0,1539
+  36 0016 97000000 		call	rcu_periph_clock_enable
+  36      E7800000 
+  37              	.LVL1:
+  15:radioHead.c   **** 
+  16:radioHead.c   ****     /* enable USART clock */
+  17:radioHead.c   ****     rcu_periph_clock_enable(RCU_USART2);
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 2
+
+
+  38              		.loc 1 17 5
+  39 001e 13052071 		li	a0,1810
+  40 0022 97000000 		call	rcu_periph_clock_enable
+  40      E7800000 
+  41              	.LVL2:
+  18:radioHead.c   **** 
+  19:radioHead.c   ****     /* connect port to USARTx_Tx */
+  20:radioHead.c   ****     gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10); //PP for no half duplex
+  42              		.loc 1 20 5
+  43 002a 37140140 		li	s0,1073811456
+  44 002e 130504C0 		addi	a0,s0,-1024
+  45 0032 93060040 		li	a3,1024
+  46 0036 0D46     		li	a2,3
+  47 0038 E145     		li	a1,24
+  48 003a 97000000 		call	gpio_init
+  48      E7800000 
+  49              	.LVL3:
+  21:radioHead.c   **** 
+  22:radioHead.c   ****     /* connect port to USARTx_Rx */
+  23:radioHead.c   ****     gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
+  50              		.loc 1 23 5
+  51 0042 8566     		li	a3,4096
+  52 0044 93860680 		addi	a3,a3,-2048
+  53 0048 0D46     		li	a2,3
+  54 004a 9145     		li	a1,4
+  55 004c 130504C0 		addi	a0,s0,-1024
+  56 0050 97000000 		call	gpio_init
+  56      E7800000 
+  57              	.LVL4:
+  24:radioHead.c   **** 
+  25:radioHead.c   ****     /* USART configure */
+  26:radioHead.c   ****     usart_deinit(USART2);
+  58              		.loc 1 26 5
+  59 0058 37540040 		li	s0,1073762304
+  60 005c 13050480 		addi	a0,s0,-2048
+  61 0060 97000000 		call	usart_deinit
+  61      E7800000 
+  62              	.LVL5:
+  27:radioHead.c   ****     usart_baudrate_set(USART2, 1200);
+  63              		.loc 1 27 5
+  64 0068 13050480 		addi	a0,s0,-2048
+  65 006c 9305004B 		li	a1,1200
+  66 0070 97000000 		call	usart_baudrate_set
+  66      E7800000 
+  67              	.LVL6:
+  28:radioHead.c   ****     usart_word_length_set(USART2, USART_WL_8BIT);
+  68              		.loc 1 28 5
+  69 0078 13050480 		addi	a0,s0,-2048
+  70 007c 8145     		li	a1,0
+  71 007e 97000000 		call	usart_word_length_set
+  71      E7800000 
+  72              	.LVL7:
+  29:radioHead.c   ****     usart_stop_bit_set(USART2, USART_STB_1BIT);
+  73              		.loc 1 29 5
+  74 0086 13050480 		addi	a0,s0,-2048
+  75 008a 8145     		li	a1,0
+  76 008c 97000000 		call	usart_stop_bit_set
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 3
+
+
+  76      E7800000 
+  77              	.LVL8:
+  30:radioHead.c   ****     usart_parity_config(USART2, USART_PM_NONE);
+  78              		.loc 1 30 5
+  79 0094 13050480 		addi	a0,s0,-2048
+  80 0098 8145     		li	a1,0
+  81 009a 97000000 		call	usart_parity_config
+  81      E7800000 
+  82              	.LVL9:
+  31:radioHead.c   ****     usart_hardware_flow_rts_config(USART2, USART_RTS_DISABLE);
+  83              		.loc 1 31 5
+  84 00a2 13050480 		addi	a0,s0,-2048
+  85 00a6 8145     		li	a1,0
+  86 00a8 97000000 		call	usart_hardware_flow_rts_config
+  86      E7800000 
+  87              	.LVL10:
+  32:radioHead.c   ****     usart_hardware_flow_cts_config(USART2, USART_CTS_DISABLE);
+  88              		.loc 1 32 5
+  89 00b0 13050480 		addi	a0,s0,-2048
+  90 00b4 8145     		li	a1,0
+  91 00b6 97000000 		call	usart_hardware_flow_cts_config
+  91      E7800000 
+  92              	.LVL11:
+  33:radioHead.c   ****     usart_receive_config(USART2, USART_RECEIVE_ENABLE);
+  93              		.loc 1 33 5
+  94 00be 13050480 		addi	a0,s0,-2048
+  95 00c2 9145     		li	a1,4
+  96 00c4 97000000 		call	usart_receive_config
+  96      E7800000 
+  97              	.LVL12:
+  34:radioHead.c   ****     usart_transmit_config(USART2, USART_TRANSMIT_ENABLE);
+  98              		.loc 1 34 5
+  99 00cc A145     		li	a1,8
+ 100 00ce 13050480 		addi	a0,s0,-2048
+ 101 00d2 97000000 		call	usart_transmit_config
+ 101      E7800000 
+ 102              	.LVL13:
+  35:radioHead.c   **** 
+  36:radioHead.c   ****     eclic_global_interrupt_enable();
+ 103              		.loc 1 36 5
+ 104 00da 97000000 		call	eclic_global_interrupt_enable
+ 104      E7800000 
+ 105              	.LVL14:
+  37:radioHead.c   ****     eclic_priority_group_set(ECLIC_PRIGROUP_LEVEL3_PRIO1);
+ 106              		.loc 1 37 5
+ 107 00e2 0D45     		li	a0,3
+ 108 00e4 97000000 		call	eclic_priority_group_set
+ 108      E7800000 
+ 109              	.LVL15:
+  38:radioHead.c   ****     eclic_irq_enable(USART2_IRQn, 1, 0);
+ 110              		.loc 1 38 5
+ 111 00ec 0146     		li	a2,0
+ 112 00ee 8545     		li	a1,1
+ 113 00f0 1305A003 		li	a0,58
+ 114 00f4 97000000 		call	eclic_irq_enable
+ 114      E7800000 
+ 115              	.LVL16:
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 4
+
+
+  39:radioHead.c   **** 
+  40:radioHead.c   ****     usart_interrupt_enable(USART2, USART_INT_RBNE); 
+ 116              		.loc 1 40 5
+ 117 00fc 13050480 		addi	a0,s0,-2048
+ 118 0100 93055030 		li	a1,773
+ 119 0104 97000000 		call	usart_interrupt_enable
+ 119      E7800000 
+ 120              	.LVL17:
+  41:radioHead.c   **** 
+  42:radioHead.c   ****     usart_enable(USART2);
+ 121              		.loc 1 42 5
+ 122 010c 13050480 		addi	a0,s0,-2048
+  43:radioHead.c   **** 
+  44:radioHead.c   **** //     usart_dma_transmit_config(USART2, USART_DENT_ENABLE);
+  45:radioHead.c   **** //    usart_dma_receive_config(USART2, USART_DENR_ENABLE);
+  46:radioHead.c   **** //
+  47:radioHead.c   **** //    dma_deinit(DMA0, DMA_CH2);
+  48:radioHead.c   **** //    dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+  49:radioHead.c   **** //    dma_init_struct.memory_addr = (uint32_t)rx_radio_buffer;
+  50:radioHead.c   **** //    dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+  51:radioHead.c   **** //    dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+  52:radioHead.c   **** //    dma_init_struct.number = 1024;
+  53:radioHead.c   **** //    dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+  54:radioHead.c   **** //    dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+  55:radioHead.c   **** //    dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+  56:radioHead.c   **** //    dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+  57:radioHead.c   **** //    dma_init(DMA0, DMA_CH2, &dma_init_struct);
+  58:radioHead.c   **** //        /* configure DMA mode */
+  59:radioHead.c   **** //    dma_circulation_disable(DMA0, DMA_CH2);
+  60:radioHead.c   **** //        /* enable DMA channel4 */
+  61:radioHead.c   **** //    dma_channel_enable(DMA0, DMA_CH2); 
+  62:radioHead.c   **** 
+  63:radioHead.c   **** }
+ 123              		.loc 1 63 1 is_stmt 0
+ 124 0110 2244     		lw	s0,8(sp)
+ 125              		.cfi_restore 8
+ 126 0112 B240     		lw	ra,12(sp)
+ 127              		.cfi_restore 1
+ 128 0114 4101     		addi	sp,sp,16
+ 129              	.LCFI1:
+ 130              		.cfi_def_cfa_offset 0
+  42:radioHead.c   **** 
+ 131              		.loc 1 42 5
+ 132 0116 17030000 		tail	usart_enable
+ 132      67000300 
+ 133              	.LVL18:
+ 134              		.cfi_endproc
+ 135              	.LFE2:
+ 137              		.section	.text.read_radio,"ax",@progbits
+ 138              		.align	1
+ 139              		.globl	read_radio
+ 141              	read_radio:
+ 142              	.LFB3:
+  64:radioHead.c   **** 
+  65:radioHead.c   **** size_t read_radio(char* buffer, uint32_t size){
+ 143              		.loc 1 65 47 is_stmt 1
+ 144              		.cfi_startproc
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 5
+
+
+ 145              	.LVL19:
+  66:radioHead.c   ****     if(rx_radio_buffer[0] != 0){
+ 146              		.loc 1 66 5
+  65:radioHead.c   ****     if(rx_radio_buffer[0] != 0){
+ 147              		.loc 1 65 47 is_stmt 0
+ 148 0000 7971     		addi	sp,sp,-48
+ 149              	.LCFI2:
+ 150              		.cfi_def_cfa_offset 48
+ 151 0002 26D2     		sw	s1,36(sp)
+ 152              		.cfi_offset 9, -12
+ 153              		.loc 1 66 23
+ 154 0004 B7040000 		lui	s1,%hi(.LANCHOR0)
+ 155              		.loc 1 66 7
+ 156 0008 83C70400 		lbu	a5,%lo(.LANCHOR0)(s1)
+  65:radioHead.c   ****     if(rx_radio_buffer[0] != 0){
+ 157              		.loc 1 65 47
+ 158 000c 22D4     		sw	s0,40(sp)
+ 159 000e 06D6     		sw	ra,44(sp)
+ 160              		.cfi_offset 8, -8
+ 161              		.cfi_offset 1, -4
+  67:radioHead.c   ****         int i = 0;
+  68:radioHead.c   ****         for(; i < 1024 && rx_radio_buffer[i] != 0 && i < size - 1; i++){
+  69:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+  70:radioHead.c   ****             rx_radio_buffer[i] = 0; */
+  71:radioHead.c   ****         }
+  72:radioHead.c   ****         buffer[i] = '\0';
+  73:radioHead.c   ****     
+  74:radioHead.c   **** 
+  75:radioHead.c   **** 
+  76:radioHead.c   **** 
+  77:radioHead.c   ****         dma_parameter_struct dma_init_struct;
+  78:radioHead.c   **** 
+  79:radioHead.c   ****         dma_deinit(DMA0, DMA_CH2);
+  80:radioHead.c   ****         dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+  81:radioHead.c   ****         dma_init_struct.memory_addr = (uint32_t)rx_radio_buffer;
+  82:radioHead.c   ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+  83:radioHead.c   ****         dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+  84:radioHead.c   ****         dma_init_struct.number = 1024;
+  85:radioHead.c   ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+  86:radioHead.c   ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+  87:radioHead.c   ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+  88:radioHead.c   ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+  89:radioHead.c   ****         dma_init(DMA0, DMA_CH2, &dma_init_struct);
+  90:radioHead.c   ****         dma_circulation_disable(DMA0, DMA_CH2);
+  91:radioHead.c   ****         dma_channel_enable(DMA0, DMA_CH2);
+  92:radioHead.c   ****         return i;
+  93:radioHead.c   ****     }
+  94:radioHead.c   ****     return 0;
+ 162              		.loc 1 94 12
+ 163 0010 0144     		li	s0,0
+  66:radioHead.c   ****         int i = 0;
+ 164              		.loc 1 66 7
+ 165 0012 C9C7     		beq	a5,zero,.L3
+ 166 0014 93840400 		addi	s1,s1,%lo(.LANCHOR0)
+ 167              	.LBB2:
+  67:radioHead.c   ****         int i = 0;
+ 168              		.loc 1 67 13
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 6
+
+
+ 169 0018 8147     		li	a5,0
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 170              		.loc 1 68 63
+ 171 001a FD15     		addi	a1,a1,-1
+ 172              	.LVL20:
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 173              		.loc 1 68 9
+ 174 001c 13070040 		li	a4,1024
+ 175              	.L4:
+ 176              	.LVL21:
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 177              		.loc 1 68 51 discriminator 3
+ 178 0020 63FAB700 		bleu	a1,a5,.L6
+  71:radioHead.c   ****         buffer[i] = '\0';
+ 179              		.loc 1 71 9 is_stmt 1 discriminator 4
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 180              		.loc 1 68 69 is_stmt 0 discriminator 4
+ 181 0024 8507     		addi	a5,a5,1
+ 182              	.LVL22:
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 183              		.loc 1 68 9 discriminator 4
+ 184 0026 6387E700 		beq	a5,a4,.L6
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 185              		.loc 1 68 42 discriminator 2
+ 186 002a B386F400 		add	a3,s1,a5
+  68:radioHead.c   ****             /* buffer[i] = rx_radio_buffer[i];
+ 187              		.loc 1 68 24 discriminator 2
+ 188 002e 83C60600 		lbu	a3,0(a3)
+ 189 0032 FDF6     		bne	a3,zero,.L4
+ 190              	.L6:
+  72:radioHead.c   ****     
+ 191              		.loc 1 72 9 is_stmt 1
+  72:radioHead.c   ****     
+ 192              		.loc 1 72 19 is_stmt 0
+ 193 0034 3E95     		add	a0,a0,a5
+ 194              	.LVL23:
+ 195 0036 23000500 		sb	zero,0(a0)
+  77:radioHead.c   **** 
+ 196              		.loc 1 77 9 is_stmt 1
+  79:radioHead.c   ****         dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 197              		.loc 1 79 9
+ 198 003a 8945     		li	a1,2
+ 199              	.LVL24:
+ 200 003c 37050240 		li	a0,1073872896
+  72:radioHead.c   ****     
+ 201              		.loc 1 72 15 is_stmt 0
+ 202 0040 3E84     		mv	s0,a5
+  79:radioHead.c   ****         dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 203              		.loc 1 79 9
+ 204 0042 97000000 		call	dma_deinit
+ 204      E7800000 
+ 205              	.LVL25:
+  80:radioHead.c   ****         dma_init_struct.memory_addr = (uint32_t)rx_radio_buffer;
+ 206              		.loc 1 80 9 is_stmt 1
+  81:radioHead.c   ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 207              		.loc 1 81 9
+  85:radioHead.c   ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 7
+
+
+ 208              		.loc 1 85 37 is_stmt 0
+ 209 004a B7570040 		li	a5,1073762304
+ 210 004e 93874780 		addi	a5,a5,-2044
+ 211 0052 3EC2     		sw	a5,4(sp)
+  84:radioHead.c   ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+ 212              		.loc 1 84 32
+ 213 0054 93070040 		li	a5,1024
+ 214 0058 3ECA     		sw	a5,20(sp)
+  88:radioHead.c   ****         dma_init(DMA0, DMA_CH2, &dma_init_struct);
+ 215              		.loc 1 88 34
+ 216 005a 8D67     		li	a5,12288
+ 217 005c 3ECC     		sw	a5,24(sp)
+  89:radioHead.c   ****         dma_circulation_disable(DMA0, DMA_CH2);
+ 218              		.loc 1 89 9
+ 219 005e 5000     		addi	a2,sp,4
+  86:radioHead.c   ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 220              		.loc 1 86 36
+ 221 0060 93070010 		li	a5,256
+  89:radioHead.c   ****         dma_circulation_disable(DMA0, DMA_CH2);
+ 222              		.loc 1 89 9
+ 223 0064 8945     		li	a1,2
+ 224 0066 37050240 		li	a0,1073872896
+  86:radioHead.c   ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 225              		.loc 1 86 36
+ 226 006a 231EF100 		sh	a5,28(sp)
+  81:radioHead.c   ****         dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 227              		.loc 1 81 37
+ 228 006e 26C6     		sw	s1,12(sp)
+  82:radioHead.c   ****         dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 229              		.loc 1 82 9 is_stmt 1
+  83:radioHead.c   ****         dma_init_struct.number = 1024;
+ 230              		.loc 1 83 9
+  84:radioHead.c   ****         dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+ 231              		.loc 1 84 9
+  85:radioHead.c   ****         dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 232              		.loc 1 85 9
+  86:radioHead.c   ****         dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 233              		.loc 1 86 9
+  87:radioHead.c   ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 234              		.loc 1 87 9
+  87:radioHead.c   ****         dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 235              		.loc 1 87 38 is_stmt 0
+ 236 0070 02C4     		sw	zero,8(sp)
+  88:radioHead.c   ****         dma_init(DMA0, DMA_CH2, &dma_init_struct);
+ 237              		.loc 1 88 9 is_stmt 1
+  83:radioHead.c   ****         dma_init_struct.number = 1024;
+ 238              		.loc 1 83 38 is_stmt 0
+ 239 0072 02C8     		sw	zero,16(sp)
+  80:radioHead.c   ****         dma_init_struct.memory_addr = (uint32_t)rx_radio_buffer;
+ 240              		.loc 1 80 35
+ 241 0074 230F0100 		sb	zero,30(sp)
+  89:radioHead.c   ****         dma_circulation_disable(DMA0, DMA_CH2);
+ 242              		.loc 1 89 9 is_stmt 1
+ 243 0078 97000000 		call	dma_init
+ 243      E7800000 
+ 244              	.LVL26:
+  90:radioHead.c   ****         dma_channel_enable(DMA0, DMA_CH2);
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 8
+
+
+ 245              		.loc 1 90 9
+ 246 0080 8945     		li	a1,2
+ 247 0082 37050240 		li	a0,1073872896
+ 248 0086 97000000 		call	dma_circulation_disable
+ 248      E7800000 
+ 249              	.LVL27:
+  91:radioHead.c   ****         return i;
+ 250              		.loc 1 91 9
+ 251 008e 8945     		li	a1,2
+ 252 0090 37050240 		li	a0,1073872896
+ 253 0094 97000000 		call	dma_channel_enable
+ 253      E7800000 
+ 254              	.LVL28:
+  92:radioHead.c   ****     }
+ 255              		.loc 1 92 9
+ 256              	.L3:
+ 257              	.LBE2:
+  95:radioHead.c   **** }
+ 258              		.loc 1 95 1 is_stmt 0
+ 259 009c 2285     		mv	a0,s0
+ 260 009e B250     		lw	ra,44(sp)
+ 261              		.cfi_restore 1
+ 262 00a0 2254     		lw	s0,40(sp)
+ 263              		.cfi_restore 8
+ 264 00a2 9254     		lw	s1,36(sp)
+ 265              		.cfi_restore 9
+ 266 00a4 4561     		addi	sp,sp,48
+ 267              	.LCFI3:
+ 268              		.cfi_def_cfa_offset 0
+ 269 00a6 8280     		jr	ra
+ 270              		.cfi_endproc
+ 271              	.LFE3:
+ 273              		.section	.text.send_radio,"ax",@progbits
+ 274              		.align	1
+ 275              		.globl	send_radio
+ 277              	send_radio:
+ 278              	.LFB4:
+  96:radioHead.c   **** 
+  97:radioHead.c   **** size_t send_radio(char* message, uint32_t size){
+ 279              		.loc 1 97 48 is_stmt 1
+ 280              		.cfi_startproc
+ 281              	.LVL29:
+  98:radioHead.c   ****     for(int i = 0; i < size && i < 1024; i++) {
+ 282              		.loc 1 98 5
+ 283              	.LBB3:
+ 284              		.loc 1 98 9
+ 285              	.LBE3:
+  97:radioHead.c   ****     for(int i = 0; i < size && i < 1024; i++) {
+ 286              		.loc 1 97 48 is_stmt 0
+ 287 0000 7971     		addi	sp,sp,-48
+ 288              	.LCFI4:
+ 289              		.cfi_def_cfa_offset 48
+ 290 0002 22D4     		sw	s0,40(sp)
+ 291              		.cfi_offset 8, -8
+ 292 0004 37040000 		lui	s0,%hi(.LANCHOR1)
+ 293 0008 26D2     		sw	s1,36(sp)
+ 294 000a 06D6     		sw	ra,44(sp)
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 9
+
+
+ 295              		.cfi_offset 9, -12
+ 296              		.cfi_offset 1, -4
+  97:radioHead.c   ****     for(int i = 0; i < size && i < 1024; i++) {
+ 297              		.loc 1 97 48
+ 298 000c AE84     		mv	s1,a1
+ 299              	.LBB4:
+ 300              		.loc 1 98 13
+ 301 000e 8147     		li	a5,0
+ 302 0010 13040400 		addi	s0,s0,%lo(.LANCHOR1)
+ 303              		.loc 1 98 29
+ 304 0014 13070040 		li	a4,1024
+ 305              	.LVL30:
+ 306              	.L14:
+ 307              		.loc 1 98 5 discriminator 1
+ 308 0018 63849700 		beq	a5,s1,.L15
+ 309              		.loc 1 98 29 discriminator 3
+ 310 001c 6396E706 		bne	a5,a4,.L16
+ 311              	.L15:
+ 312              	.LBE4:
+  99:radioHead.c   ****         tx_radio_buffer[i] = message[i];
+ 100:radioHead.c   ****     }
+ 101:radioHead.c   **** 
+ 102:radioHead.c   ****     dma_parameter_struct dma_init_struct;
+ 313              		.loc 1 102 5 is_stmt 1
+ 103:radioHead.c   ****     dma_deinit(DMA0, DMA_CH1);
+ 314              		.loc 1 103 5
+ 315 0020 8545     		li	a1,1
+ 316              	.LVL31:
+ 317 0022 37050240 		li	a0,1073872896
+ 318              	.LVL32:
+ 319 0026 97000000 		call	dma_deinit
+ 319      E7800000 
+ 320              	.LVL33:
+ 104:radioHead.c   ****     dma_init_struct.direction = DMA_MEMORY_TO_PERIPHERAL;
+ 321              		.loc 1 104 5
+ 105:radioHead.c   ****     dma_init_struct.memory_addr = (uint32_t)tx_radio_buffer;
+ 322              		.loc 1 105 5
+ 106:radioHead.c   ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 107:radioHead.c   ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 108:radioHead.c   ****     dma_init_struct.number = size;
+ 109:radioHead.c   ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+ 323              		.loc 1 109 33 is_stmt 0
+ 324 002e B7570040 		li	a5,1073762304
+ 325 0032 93874780 		addi	a5,a5,-2044
+ 326 0036 3EC2     		sw	a5,4(sp)
+ 110:radioHead.c   ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 111:radioHead.c   ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 112:radioHead.c   ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 327              		.loc 1 112 30
+ 328 0038 8D67     		li	a5,12288
+ 329 003a 3ECC     		sw	a5,24(sp)
+ 110:radioHead.c   ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 330              		.loc 1 110 32
+ 331 003c 93070010 		li	a5,256
+ 113:radioHead.c   ****     dma_init(DMA0, DMA_CH1, &dma_init_struct);
+ 332              		.loc 1 113 5
+ 333 0040 5000     		addi	a2,sp,4
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 10
+
+
+ 110:radioHead.c   ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 334              		.loc 1 110 32
+ 335 0042 231EF100 		sh	a5,28(sp)
+ 336              		.loc 1 113 5
+ 337 0046 8545     		li	a1,1
+ 104:radioHead.c   ****     dma_init_struct.memory_addr = (uint32_t)tx_radio_buffer;
+ 338              		.loc 1 104 31
+ 339 0048 8547     		li	a5,1
+ 340              		.loc 1 113 5
+ 341 004a 37050240 		li	a0,1073872896
+ 104:radioHead.c   ****     dma_init_struct.memory_addr = (uint32_t)tx_radio_buffer;
+ 342              		.loc 1 104 31
+ 343 004e 230FF100 		sb	a5,30(sp)
+ 105:radioHead.c   ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 344              		.loc 1 105 33
+ 345 0052 22C6     		sw	s0,12(sp)
+ 106:radioHead.c   ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 346              		.loc 1 106 5 is_stmt 1
+ 107:radioHead.c   ****     dma_init_struct.number = size;
+ 347              		.loc 1 107 5
+ 108:radioHead.c   ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+ 348              		.loc 1 108 28 is_stmt 0
+ 349 0054 26CA     		sw	s1,20(sp)
+ 107:radioHead.c   ****     dma_init_struct.number = size;
+ 350              		.loc 1 107 34
+ 351 0056 02C8     		sw	zero,16(sp)
+ 108:radioHead.c   ****     dma_init_struct.periph_addr = (uint32_t)&USART_DATA(USART2);
+ 352              		.loc 1 108 5 is_stmt 1
+ 109:radioHead.c   ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 353              		.loc 1 109 5
+ 110:radioHead.c   ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 354              		.loc 1 110 5
+ 111:radioHead.c   ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 355              		.loc 1 111 5
+ 111:radioHead.c   ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 356              		.loc 1 111 34 is_stmt 0
+ 357 0058 02C4     		sw	zero,8(sp)
+ 112:radioHead.c   ****     dma_init(DMA0, DMA_CH1, &dma_init_struct);
+ 358              		.loc 1 112 5 is_stmt 1
+ 359              		.loc 1 113 5
+ 360 005a 97000000 		call	dma_init
+ 360      E7800000 
+ 361              	.LVL34:
+ 114:radioHead.c   ****     /* configure DMA mode */
+ 115:radioHead.c   ****     dma_circulation_disable(DMA0, DMA_CH1);
+ 362              		.loc 1 115 5
+ 363 0062 8545     		li	a1,1
+ 364 0064 37050240 		li	a0,1073872896
+ 365 0068 97000000 		call	dma_circulation_disable
+ 365      E7800000 
+ 366              	.LVL35:
+ 116:radioHead.c   ****     /* enable DMA channel3 */
+ 117:radioHead.c   ****     dma_channel_enable(DMA0, DMA_CH1);
+ 367              		.loc 1 117 5
+ 368 0070 37050240 		li	a0,1073872896
+ 369 0074 8545     		li	a1,1
+ 370 0076 97000000 		call	dma_channel_enable
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 11
+
+
+ 370      E7800000 
+ 371              	.LVL36:
+ 118:radioHead.c   **** }
+ 372              		.loc 1 118 1 is_stmt 0
+ 373 007e B250     		lw	ra,44(sp)
+ 374              		.cfi_remember_state
+ 375              		.cfi_restore 1
+ 376 0080 2254     		lw	s0,40(sp)
+ 377              		.cfi_restore 8
+ 378 0082 9254     		lw	s1,36(sp)
+ 379              		.cfi_restore 9
+ 380              	.LVL37:
+ 381 0084 4561     		addi	sp,sp,48
+ 382              	.LCFI5:
+ 383              		.cfi_def_cfa_offset 0
+ 384 0086 8280     		jr	ra
+ 385              	.LVL38:
+ 386              	.L16:
+ 387              	.LCFI6:
+ 388              		.cfi_restore_state
+ 389              	.LBB5:
+  99:radioHead.c   ****     }
+ 390              		.loc 1 99 9 is_stmt 1 discriminator 4
+  99:radioHead.c   ****     }
+ 391              		.loc 1 99 37 is_stmt 0 discriminator 4
+ 392 0088 B306F500 		add	a3,a0,a5
+ 393 008c 03C60600 		lbu	a2,0(a3)
+  99:radioHead.c   ****     }
+ 394              		.loc 1 99 28 discriminator 4
+ 395 0090 B306F400 		add	a3,s0,a5
+  98:radioHead.c   ****         tx_radio_buffer[i] = message[i];
+ 396              		.loc 1 98 43 discriminator 4
+ 397 0094 8507     		addi	a5,a5,1
+ 398              	.LVL39:
+  99:radioHead.c   ****     }
+ 399              		.loc 1 99 28 discriminator 4
+ 400 0096 2380C600 		sb	a2,0(a3)
+ 401 009a BDBF     		j	.L14
+ 402              	.LBE5:
+ 403              		.cfi_endproc
+ 404              	.LFE4:
+ 406              		.section	.text.init_radio_gaga,"ax",@progbits
+ 407              		.align	1
+ 408              		.globl	init_radio_gaga
+ 410              	init_radio_gaga:
+ 411              	.LFB5:
+ 119:radioHead.c   **** 
+ 120:radioHead.c   **** void init_radio_gaga(){
+ 412              		.loc 1 120 23 is_stmt 1
+ 413              		.cfi_startproc
+ 121:radioHead.c   ****     USART_GP(USART2)    |= 0x01;
+ 414              		.loc 1 121 5
+ 415              		.loc 1 121 25 is_stmt 0
+ 416 0000 B7570040 		li	a5,1073762304
+ 417 0004 03A78781 		lw	a4,-2024(a5)
+ 122:radioHead.c   ****     USART_CTL2(USART2)  &= ~(0x04);
+ 123:radioHead.c   ****     USART_CTL2(USART2)  |= 0x02; 
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 12
+
+
+ 124:radioHead.c   ****     USART_CTL1(USART2)  &= ~(0x7800);
+ 418              		.loc 1 124 25
+ 419 0008 E176     		li	a3,-32768
+ 420 000a 9386F67F 		addi	a3,a3,2047
+ 121:radioHead.c   ****     USART_GP(USART2)    |= 0x01;
+ 421              		.loc 1 121 25
+ 422 000e 13671700 		ori	a4,a4,1
+ 423 0012 23ACE780 		sw	a4,-2024(a5)
+ 122:radioHead.c   ****     USART_CTL2(USART2)  &= ~(0x04);
+ 424              		.loc 1 122 5 is_stmt 1
+ 122:radioHead.c   ****     USART_CTL2(USART2)  &= ~(0x04);
+ 425              		.loc 1 122 25 is_stmt 0
+ 426 0016 03A74781 		lw	a4,-2028(a5)
+ 427 001a 6D9B     		andi	a4,a4,-5
+ 428 001c 23AAE780 		sw	a4,-2028(a5)
+ 123:radioHead.c   ****     USART_CTL1(USART2)  &= ~(0x7800);
+ 429              		.loc 1 123 5 is_stmt 1
+ 123:radioHead.c   ****     USART_CTL1(USART2)  &= ~(0x7800);
+ 430              		.loc 1 123 25 is_stmt 0
+ 431 0020 03A74781 		lw	a4,-2028(a5)
+ 432 0024 13672700 		ori	a4,a4,2
+ 433 0028 23AAE780 		sw	a4,-2028(a5)
+ 434              		.loc 1 124 5 is_stmt 1
+ 435              		.loc 1 124 25 is_stmt 0
+ 436 002c 03A70781 		lw	a4,-2032(a5)
+ 437 0030 758F     		and	a4,a4,a3
+ 438 0032 23A8E780 		sw	a4,-2032(a5)
+ 125:radioHead.c   ****     USART_CTL2(USART2)  &= ~(0x28);
+ 439              		.loc 1 125 5 is_stmt 1
+ 440              		.loc 1 125 25 is_stmt 0
+ 441 0036 03A74781 		lw	a4,-2028(a5)
+ 442 003a 137777FD 		andi	a4,a4,-41
+ 443 003e 23AAE780 		sw	a4,-2028(a5)
+ 126:radioHead.c   **** }...
+ 444              		.loc 1 126 1
+ 445 0042 8280     		ret
+ 446              		.cfi_endproc
+ 447              	.LFE5:
+ 449              		.globl	tx_radio_buffer
+ 450              		.globl	rx_radio_buffer
+ 451              		.section	.bss.rx_radio_buffer,"aw",@nobits
+ 452              		.align	2
+ 453              		.set	.LANCHOR0,. + 0
+ 456              	rx_radio_buffer:
+ 457 0000 00000000 		.zero	1024
+ 457      00000000 
+ 457      00000000 
+ 457      00000000 
+ 457      00000000 
+ 458              		.section	.bss.tx_radio_buffer,"aw",@nobits
+ 459              		.align	2
+ 460              		.set	.LANCHOR1,. + 0
+ 463              	tx_radio_buffer:
+ 464 0000 00000000 		.zero	1024
+ 464      00000000 
+ 464      00000000 
+ 464      00000000 
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 13
+
+
+ 464      00000000 
+ 465              		.text
+ 466              	.Letext0:
+ 467              		.file 2 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+ 468              		.file 3 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/riscv64-unknown-elf/inclu
+ 469              		.file 4 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_dma.h"
+ 470              		.file 5 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 471              		.file 6 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_usart.h"
+ 472              		.file 7 "/Users/gulda/Documents/risc-v/toolchain-gd32v-v200-osx/compiler/lib/gcc/riscv64-unknown-e
+ 473              		.file 8 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 474              		.file 9 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 475              		.file 10 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_eclic.h"
+ 476              		.file 11 "../../firmware/GD32VF103_standard_peripheral/gd32vf103.h"
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 radioHead.c
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:13     .text.init_radio:0000000000000000 init_radio
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:17     .text.init_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:18     .text.init_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:19     .text.init_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:20     .text.init_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:21     .text.init_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:23     .text.init_radio:0000000000000002 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:25     .text.init_radio:0000000000000002 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:27     .text.init_radio:0000000000000006 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:29     .text.init_radio:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:30     .text.init_radio:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:32     .text.init_radio:000000000000000a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:35     .text.init_radio:0000000000000012 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:39     .text.init_radio:000000000000001e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:43     .text.init_radio:000000000000002a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:51     .text.init_radio:0000000000000042 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:59     .text.init_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:64     .text.init_radio:0000000000000068 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:69     .text.init_radio:0000000000000078 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:74     .text.init_radio:0000000000000086 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:79     .text.init_radio:0000000000000094 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:84     .text.init_radio:00000000000000a2 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:89     .text.init_radio:00000000000000b0 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:94     .text.init_radio:00000000000000be .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:99     .text.init_radio:00000000000000cc .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:104    .text.init_radio:00000000000000da .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:107    .text.init_radio:00000000000000e2 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:111    .text.init_radio:00000000000000ec .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:117    .text.init_radio:00000000000000fc .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:122    .text.init_radio:000000000000010c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:124    .text.init_radio:0000000000000110 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:125    .text.init_radio:0000000000000112 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:127    .text.init_radio:0000000000000114 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:130    .text.init_radio:0000000000000116 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:132    .text.init_radio:0000000000000116 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:134    .text.init_radio:000000000000011e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:141    .text.read_radio:0000000000000000 read_radio
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:144    .text.read_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:146    .text.read_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:147    .text.read_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:148    .text.read_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:150    .text.read_radio:0000000000000002 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:152    .text.read_radio:0000000000000004 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:154    .text.read_radio:0000000000000004 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:156    .text.read_radio:0000000000000008 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:158    .text.read_radio:000000000000000c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:160    .text.read_radio:0000000000000010 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:161    .text.read_radio:0000000000000010 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:163    .text.read_radio:0000000000000010 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:165    .text.read_radio:0000000000000012 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:169    .text.read_radio:0000000000000018 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:171    .text.read_radio:000000000000001a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:174    .text.read_radio:000000000000001c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:178    .text.read_radio:0000000000000020 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:180    .text.read_radio:0000000000000024 .L0 
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 15
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:181    .text.read_radio:0000000000000024 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:184    .text.read_radio:0000000000000026 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:186    .text.read_radio:000000000000002a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:188    .text.read_radio:000000000000002e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:192    .text.read_radio:0000000000000034 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:193    .text.read_radio:0000000000000034 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:197    .text.read_radio:000000000000003a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:198    .text.read_radio:000000000000003a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:202    .text.read_radio:0000000000000040 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:204    .text.read_radio:0000000000000042 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:207    .text.read_radio:000000000000004a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:208    .text.read_radio:000000000000004a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:209    .text.read_radio:000000000000004a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:213    .text.read_radio:0000000000000054 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:216    .text.read_radio:000000000000005a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:219    .text.read_radio:000000000000005e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:221    .text.read_radio:0000000000000060 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:223    .text.read_radio:0000000000000064 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:226    .text.read_radio:000000000000006a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:228    .text.read_radio:000000000000006e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:230    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:231    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:232    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:233    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:234    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:235    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:236    .text.read_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:238    .text.read_radio:0000000000000072 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:239    .text.read_radio:0000000000000072 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:241    .text.read_radio:0000000000000074 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:243    .text.read_radio:0000000000000078 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:246    .text.read_radio:0000000000000080 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:251    .text.read_radio:000000000000008e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:258    .text.read_radio:000000000000009c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:259    .text.read_radio:000000000000009c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:261    .text.read_radio:00000000000000a0 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:263    .text.read_radio:00000000000000a2 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:265    .text.read_radio:00000000000000a4 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:268    .text.read_radio:00000000000000a6 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:270    .text.read_radio:00000000000000a8 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:277    .text.send_radio:0000000000000000 send_radio
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:280    .text.send_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:282    .text.send_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:284    .text.send_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:286    .text.send_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:287    .text.send_radio:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:289    .text.send_radio:0000000000000002 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:291    .text.send_radio:0000000000000004 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:295    .text.send_radio:000000000000000c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:296    .text.send_radio:000000000000000c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:298    .text.send_radio:000000000000000c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:301    .text.send_radio:000000000000000e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:304    .text.send_radio:0000000000000014 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:308    .text.send_radio:0000000000000018 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:310    .text.send_radio:000000000000001c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:314    .text.send_radio:0000000000000020 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:315    .text.send_radio:0000000000000020 .L0 
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 16
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:322    .text.send_radio:000000000000002e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:323    .text.send_radio:000000000000002e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:324    .text.send_radio:000000000000002e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:328    .text.send_radio:0000000000000038 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:331    .text.send_radio:000000000000003c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:333    .text.send_radio:0000000000000040 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:335    .text.send_radio:0000000000000042 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:337    .text.send_radio:0000000000000046 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:339    .text.send_radio:0000000000000048 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:341    .text.send_radio:000000000000004a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:343    .text.send_radio:000000000000004e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:345    .text.send_radio:0000000000000052 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:347    .text.send_radio:0000000000000054 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:348    .text.send_radio:0000000000000054 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:349    .text.send_radio:0000000000000054 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:351    .text.send_radio:0000000000000056 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:353    .text.send_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:354    .text.send_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:355    .text.send_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:356    .text.send_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:357    .text.send_radio:0000000000000058 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:359    .text.send_radio:000000000000005a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:360    .text.send_radio:000000000000005a .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:363    .text.send_radio:0000000000000062 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:368    .text.send_radio:0000000000000070 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:373    .text.send_radio:000000000000007e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:374    .text.send_radio:0000000000000080 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:375    .text.send_radio:0000000000000080 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:377    .text.send_radio:0000000000000082 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:379    .text.send_radio:0000000000000084 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:383    .text.send_radio:0000000000000086 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:388    .text.send_radio:0000000000000088 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:391    .text.send_radio:0000000000000088 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:392    .text.send_radio:0000000000000088 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:395    .text.send_radio:0000000000000090 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:397    .text.send_radio:0000000000000094 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:400    .text.send_radio:0000000000000096 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:403    .text.send_radio:000000000000009c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:410    .text.init_radio_gaga:0000000000000000 init_radio_gaga
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:413    .text.init_radio_gaga:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:414    .text.init_radio_gaga:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:415    .text.init_radio_gaga:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:416    .text.init_radio_gaga:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:419    .text.init_radio_gaga:0000000000000008 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:422    .text.init_radio_gaga:000000000000000e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:425    .text.init_radio_gaga:0000000000000016 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:426    .text.init_radio_gaga:0000000000000016 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:430    .text.init_radio_gaga:0000000000000020 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:431    .text.init_radio_gaga:0000000000000020 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:435    .text.init_radio_gaga:000000000000002c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:436    .text.init_radio_gaga:000000000000002c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:440    .text.init_radio_gaga:0000000000000036 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:441    .text.init_radio_gaga:0000000000000036 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:445    .text.init_radio_gaga:0000000000000042 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:446    .text.init_radio_gaga:0000000000000044 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:463    .bss.tx_radio_buffer:0000000000000000 tx_radio_buffer
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:456    .bss.rx_radio_buffer:0000000000000000 rx_radio_buffer
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 17
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:453    .bss.rx_radio_buffer:0000000000000000 .LANCHOR0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:460    .bss.tx_radio_buffer:0000000000000000 .LANCHOR1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:137    .text.init_radio:000000000000011e .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:273    .text.read_radio:00000000000000a8 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:406    .text.send_radio:000000000000009c .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:451    .text.init_radio_gaga:0000000000000044 .L0 
+                     .debug_frame:0000000000000000 .L0 
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:256    .text.read_radio:000000000000009c .L3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:190    .text.read_radio:0000000000000034 .L6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:175    .text.read_radio:0000000000000020 .L4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:311    .text.send_radio:0000000000000020 .L15
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:386    .text.send_radio:0000000000000088 .L16
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:306    .text.send_radio:0000000000000018 .L14
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:1808   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2725   .debug_str:00000000000005bd .LASF173
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2837   .debug_str:000000000000097b .LASF174
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2771   .debug_str:000000000000075f .LASF175
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2471   .debug_ranges:0000000000000000 .Ldebug_ranges0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2491   .debug_line:0000000000000000 .Ldebug_line0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2717   .debug_str:000000000000058b .LASF176
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2719   .debug_str:0000000000000590 .LASF0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2741   .debug_str:0000000000000697 .LASF1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2663   .debug_str:0000000000000448 .LASF2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2751   .debug_str:00000000000006e6 .LASF3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2693   .debug_str:00000000000004da .LASF4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2833   .debug_str:0000000000000963 .LASF5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2543   .debug_str:000000000000014a .LASF6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2847   .debug_str:00000000000009d2 .LASF7
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2731   .debug_str:000000000000065b .LASF8
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2569   .debug_str:00000000000001f8 .LASF9
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2659   .debug_str:0000000000000430 .LASF10
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2529   .debug_str:00000000000000f6 .LASF11
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2761   .debug_str:0000000000000721 .LASF12
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2591   .debug_str:0000000000000275 .LASF13
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2829   .debug_str:0000000000000948 .LASF14
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2669   .debug_str:0000000000000471 .LASF15
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2825   .debug_str:0000000000000922 .LASF16
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2611   .debug_str:00000000000002f2 .LASF17
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2523   .debug_str:00000000000000cc .LASF18
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2747   .debug_str:00000000000006c0 .LASF19
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2559   .debug_str:00000000000001b9 .LASF20
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2817   .debug_str:00000000000008e3 .LASF21
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2657   .debug_str:000000000000041d .LASF22
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2519   .debug_str:00000000000000b3 .LASF23
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2579   .debug_str:0000000000000237 .LASF24
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2597   .debug_str:000000000000029b .LASF25
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2507   .debug_str:0000000000000071 .LASF26
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2779   .debug_str:00000000000007da .LASF27
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2769   .debug_str:0000000000000752 .LASF28
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2805   .debug_str:00000000000008a1 .LASF29
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2695   .debug_str:00000000000004e9 .LASF30
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2841   .debug_str:0000000000000995 .LASF31
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2503   .debug_str:0000000000000044 .LASF32
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2525   .debug_str:00000000000000df .LASF33
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2755   .debug_str:0000000000000701 .LASF34
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2589   .debug_str:0000000000000269 .LASF35
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2791   .debug_str:000000000000083f .LASF36
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 18
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2633   .debug_str:0000000000000399 .LASF37
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2705   .debug_str:0000000000000538 .LASF38
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2765   .debug_str:0000000000000733 .LASF39
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2701   .debug_str:000000000000051b .LASF40
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2553   .debug_str:0000000000000185 .LASF41
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2539   .debug_str:0000000000000133 .LASF42
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2739   .debug_str:000000000000068b .LASF43
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2573   .debug_str:0000000000000208 .LASF44
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2733   .debug_str:0000000000000664 .LASF45
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2735   .debug_str:0000000000000673 .LASF46
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2775   .debug_str:00000000000007c1 .LASF47
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2551   .debug_str:000000000000017b .LASF48
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2823   .debug_str:0000000000000916 .LASF49
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2803   .debug_str:0000000000000897 .LASF50
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2655   .debug_str:0000000000000412 .LASF51
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2541   .debug_str:000000000000013f .LASF52
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2667   .debug_str:0000000000000465 .LASF53
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2545   .debug_str:0000000000000153 .LASF54
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2773   .debug_str:00000000000007ae .LASF55
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2607   .debug_str:00000000000002d3 .LASF56
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2517   .debug_str:00000000000000a0 .LASF57
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2703   .debug_str:0000000000000525 .LASF58
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2555   .debug_str:000000000000018f .LASF59
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2711   .debug_str:0000000000000562 .LASF60
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2723   .debug_str:00000000000005af .LASF61
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2567   .debug_str:00000000000001ea .LASF62
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2671   .debug_str:000000000000047c .LASF63
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2625   .debug_str:000000000000036d .LASF64
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2787   .debug_str:000000000000081d .LASF65
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2521   .debug_str:00000000000000bf .LASF66
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2621   .debug_str:0000000000000351 .LASF67
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2811   .debug_str:00000000000008c3 .LASF72
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2793   .debug_str:000000000000084c .LASF68
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2533   .debug_str:000000000000010a .LASF69
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2827   .debug_str:0000000000000935 .LASF70
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2737   .debug_str:0000000000000682 .LASF71
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2797   .debug_str:0000000000000862 .LASF73
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2767   .debug_str:0000000000000740 .LASF74
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2641   .debug_str:00000000000003c4 .LASF75
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2557   .debug_str:00000000000001a2 .LASF76
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2615   .debug_str:0000000000000324 .LASF77
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2549   .debug_str:0000000000000172 .LASF78
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2715   .debug_str:000000000000057b .LASF144
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2675   .debug_str:0000000000000490 .LASF79
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2677   .debug_str:0000000000000498 .LASF80
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2679   .debug_str:00000000000004a0 .LASF81
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2681   .debug_str:00000000000004a8 .LASF82
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2683   .debug_str:00000000000004b0 .LASF83
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2685   .debug_str:00000000000004b8 .LASF84
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2687   .debug_str:00000000000004c0 .LASF85
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2799   .debug_str:000000000000086d .LASF86
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2753   .debug_str:00000000000006f4 .LASF87
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2609   .debug_str:00000000000002e6 .LASF88
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2617   .debug_str:000000000000032c .LASF89
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2763   .debug_str:000000000000072c .LASF90
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2745   .debug_str:00000000000006b7 .LASF91
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2497   .debug_str:0000000000000029 .LASF92
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 19
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2527   .debug_str:00000000000000eb .LASF93
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2495   .debug_str:000000000000001f .LASF94
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2537   .debug_str:000000000000011e .LASF95
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2511   .debug_str:0000000000000087 .LASF96
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2513   .debug_str:0000000000000090 .LASF97
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2849   .debug_str:00000000000009de .LASF98
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2777   .debug_str:00000000000007d1 .LASF99
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2819   .debug_str:00000000000008f6 .LASF100
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2627   .debug_str:0000000000000378 .LASF101
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2629   .debug_str:0000000000000383 .LASF102
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2631   .debug_str:000000000000038e .LASF103
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2563   .debug_str:00000000000001d7 .LASF104
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2635   .debug_str:00000000000003a6 .LASF105
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2637   .debug_str:00000000000003b1 .LASF106
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2587   .debug_str:000000000000025f .LASF107
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2601   .debug_str:00000000000002b2 .LASF108
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2603   .debug_str:00000000000002bb .LASF109
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2727   .debug_str:0000000000000645 .LASF110
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2813   .debug_str:00000000000008cd .LASF111
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2757   .debug_str:000000000000070d .LASF112
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2759   .debug_str:0000000000000717 .LASF113
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2583   .debug_str:000000000000024d .LASF114
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2585   .debug_str:0000000000000256 .LASF115
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2689   .debug_str:00000000000004c8 .LASF116
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2691   .debug_str:00000000000004d1 .LASF117
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2531   .debug_str:0000000000000101 .LASF118
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2795   .debug_str:000000000000085a .LASF119
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2565   .debug_str:00000000000001e2 .LASF120
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2639   .debug_str:00000000000003bc .LASF121
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2785   .debug_str:0000000000000816 .LASF122
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2643   .debug_str:00000000000003d2 .LASF123
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2645   .debug_str:00000000000003dc .LASF124
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2647   .debug_str:00000000000003e6 .LASF125
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2649   .debug_str:00000000000003f0 .LASF126
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2651   .debug_str:00000000000003fa .LASF127
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2807   .debug_str:00000000000008b1 .LASF128
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2809   .debug_str:00000000000008ba .LASF129
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2561   .debug_str:00000000000001cc .LASF130
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2599   .debug_str:00000000000002a9 .LASF131
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2593   .debug_str:0000000000000280 .LASF132
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2605   .debug_str:00000000000002c4 .LASF133
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2653   .debug_str:0000000000000404 .LASF134
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2789   .debug_str:0000000000000832 .LASF135
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2707   .debug_str:0000000000000545 .LASF136
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2699   .debug_str:000000000000050c .LASF137
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2577   .debug_str:0000000000000229 .LASF138
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2839   .debug_str:0000000000000987 .LASF139
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2709   .debug_str:0000000000000554 .LASF140
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2571   .debug_str:0000000000000201 .LASF141
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2713   .debug_str:000000000000056f .LASF142
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2499   .debug_str:0000000000000034 .LASF143
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2595   .debug_str:000000000000028b .LASF145
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2831   .debug_str:0000000000000953 .LASF146
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2665   .debug_str:0000000000000455 .LASF177
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:411    .text.init_radio_gaga:0000000000000000 .LFB5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:447    .text.init_radio_gaga:0000000000000044 .LFE5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2661   .debug_str:000000000000043d .LASF150
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 20
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:278    .text.send_radio:0000000000000000 .LFB4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:404    .text.send_radio:000000000000009c .LFE4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2292   .debug_loc:0000000000000000 .LLST5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2509   .debug_str:000000000000007f .LASF147
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2315   .debug_loc:0000000000000038 .LLST6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2673   .debug_str:000000000000048b .LASF148
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2333   .debug_loc:0000000000000064 .LLST7
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2623   .debug_str:000000000000035d .LASF149
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2355   .debug_loc:000000000000009b .LLST8
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:320    .text.send_radio:000000000000002e .LVL33
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:361    .text.send_radio:0000000000000062 .LVL34
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:366    .text.send_radio:0000000000000070 .LVL35
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:371    .text.send_radio:000000000000007e .LVL36
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2729   .debug_str:0000000000000650 .LASF151
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:142    .text.read_radio:0000000000000000 .LFB3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:271    .text.read_radio:00000000000000a8 .LFE3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2371   .debug_loc:00000000000000c5 .LLST1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2515   .debug_str:0000000000000099 .LASF152
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2389   .debug_loc:00000000000000f1 .LLST2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2403   .debug_loc:0000000000000112 .LLST3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:167    .text.read_radio:0000000000000018 .LBB2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:257    .text.read_radio:000000000000009c .LBE2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2423   .debug_loc:0000000000000140 .LLST4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:205    .text.read_radio:000000000000004a .LVL25
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:244    .text.read_radio:0000000000000080 .LVL26
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:249    .text.read_radio:000000000000008e .LVL27
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:254    .text.read_radio:000000000000009c .LVL28
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2815   .debug_str:00000000000008d8 .LASF178
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:14     .text.init_radio:0000000000000000 .LFB2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:135    .text.init_radio:000000000000011e .LFE2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2434   .debug_loc:000000000000015e .LLST0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:33     .text.init_radio:0000000000000012 .LVL0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:37     .text.init_radio:000000000000001e .LVL1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:41     .text.init_radio:000000000000002a .LVL2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:49     .text.init_radio:0000000000000042 .LVL3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:57     .text.init_radio:0000000000000058 .LVL4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:62     .text.init_radio:0000000000000068 .LVL5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:67     .text.init_radio:0000000000000078 .LVL6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:72     .text.init_radio:0000000000000086 .LVL7
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:77     .text.init_radio:0000000000000094 .LVL8
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:82     .text.init_radio:00000000000000a2 .LVL9
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:87     .text.init_radio:00000000000000b0 .LVL10
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:92     .text.init_radio:00000000000000be .LVL11
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:97     .text.init_radio:00000000000000cc .LVL12
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:102    .text.init_radio:00000000000000da .LVL13
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:105    .text.init_radio:00000000000000e2 .LVL14
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:109    .text.init_radio:00000000000000ec .LVL15
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:115    .text.init_radio:00000000000000fc .LVL16
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:120    .text.init_radio:000000000000010c .LVL17
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:133    .text.init_radio:000000000000011e .LVL18
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2501   .debug_str:0000000000000039 .LASF153
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2581   .debug_str:0000000000000244 .LASF154
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2619   .debug_str:0000000000000339 .LASF155
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2749   .debug_str:00000000000006d3 .LASF156
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2845   .debug_str:00000000000009ba .LASF157
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2535   .debug_str:0000000000000114 .LASF158
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2721   .debug_str:00000000000005a2 .LASF159
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 21
+
+
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2743   .debug_str:00000000000006a4 .LASF160
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2821   .debug_str:0000000000000900 .LASF161
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2547   .debug_str:000000000000015f .LASF162
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2697   .debug_str:00000000000004f8 .LASF163
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2613   .debug_str:0000000000000305 .LASF164
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2493   .debug_str:0000000000000000 .LASF165
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2575   .debug_str:0000000000000214 .LASF166
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2781   .debug_str:00000000000007e9 .LASF167
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2801   .debug_str:0000000000000879 .LASF168
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2505   .debug_str:0000000000000058 .LASF169
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2843   .debug_str:00000000000009a9 .LASF170
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2783   .debug_str:00000000000007ff .LASF171
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:2835   .debug_str:000000000000096e .LASF172
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:288    .text.send_radio:0000000000000002 .LCFI4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:382    .text.send_radio:0000000000000086 .LCFI5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:387    .text.send_radio:0000000000000088 .LCFI6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:281    .text.send_radio:0000000000000000 .LVL29
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:318    .text.send_radio:0000000000000026 .LVL32
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:385    .text.send_radio:0000000000000088 .LVL38
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:316    .text.send_radio:0000000000000022 .LVL31
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:380    .text.send_radio:0000000000000084 .LVL37
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:305    .text.send_radio:0000000000000018 .LVL30
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:149    .text.read_radio:0000000000000002 .LCFI2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:267    .text.read_radio:00000000000000a6 .LCFI3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:145    .text.read_radio:0000000000000000 .LVL19
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:194    .text.read_radio:0000000000000036 .LVL23
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:172    .text.read_radio:000000000000001c .LVL20
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:199    .text.read_radio:000000000000003c .LVL24
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:176    .text.read_radio:0000000000000020 .LVL21
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:22     .text.init_radio:0000000000000002 .LCFI0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:129    .text.init_radio:0000000000000116 .LCFI1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:478    .debug_info:0000000000000000 .Ldebug_info0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:283    .text.send_radio:0000000000000000 .LBB3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:285    .text.send_radio:0000000000000000 .LBE3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:299    .text.send_radio:000000000000000e .LBB4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:312    .text.send_radio:0000000000000020 .LBE4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:389    .text.send_radio:0000000000000088 .LBB5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s:402    .text.send_radio:000000000000009c .LBE5
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+usart_deinit
+usart_baudrate_set
+usart_word_length_set
+usart_stop_bit_set
+usart_parity_config
+usart_hardware_flow_rts_config
+usart_hardware_flow_cts_config
+usart_receive_config
+usart_transmit_config
+eclic_global_interrupt_enable
+eclic_priority_group_set
+eclic_irq_enable
+usart_interrupt_enable
+usart_enable
+dma_deinit
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//ccpUaYJc.s 			page 22
+
+
+dma_init
+dma_circulation_disable
+dma_channel_enable

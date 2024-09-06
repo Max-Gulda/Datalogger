@@ -1,0 +1,35 @@
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s 			page 1
+
+
+   1              		.file	"ffsystem.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              	.Letext0:
+GAS LISTING /var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ffsystem.c
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:68     .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:134    .debug_str:000000000000009c .LASF10
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:142    .debug_str:0000000000000152 .LASF11
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:120    .debug_str:0000000000000000 .LASF12
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:118    .debug_line:0000000000000000 .Ldebug_line0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:126    .debug_str:000000000000006e .LASF0
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:136    .debug_str:0000000000000124 .LASF1
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:130    .debug_str:000000000000008d .LASF2
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:128    .debug_str:000000000000007a .LASF3
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:138    .debug_str:0000000000000132 .LASF4
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:124    .debug_str:000000000000005c .LASF5
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:144    .debug_str:000000000000016b .LASF6
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:140    .debug_str:000000000000013b .LASF7
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:122    .debug_str:000000000000004f .LASF8
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:132    .debug_str:0000000000000097 .LASF9
+/var/folders/yy/83vjwp7d53j56dbzj8_jnpcr0000gn/T//cczV3ebH.s:11     .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS
